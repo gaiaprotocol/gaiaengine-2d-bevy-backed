@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "webpack": "node --loader ts-node/esm node_modules/webpack-cli/bin/cli.js --mode development --watch --config webpack.config.ts"
+  },
   "name": "@gaiaengine/2d-bevy-backed",
   "author": "Gaia Protocol",
   "homepage": "https://gaiaprotocol.com",
@@ -6,6 +9,20 @@
   "type": "module",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^1.7.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "@types/node": "^22.7.5",
+    "@types/webpack": "^5.28.5",
+    "css-loader": "^7.1.2",
+    "less": "^4.2.0",
+    "less-loader": "^12.2.0",
+    "mini-css-extract-plugin": "^2.9.1",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2"
+  }
 }
