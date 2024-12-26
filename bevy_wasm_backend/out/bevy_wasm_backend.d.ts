@@ -7,9 +7,19 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly start: () => void;
-  readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
-  readonly __wbindgen_export_2: WebAssembly.Table;
+  readonly __wbindgen_export_1: WebAssembly.Table;
+  readonly __wbindgen_exn_store: (a: number) => void;
+  readonly __wbindgen_malloc: (a: number, b: number) => number;
+  readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
+  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
+  readonly __wbindgen_export_6: WebAssembly.Table;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h41addf8331a7648d: (a: number, b: number, c: number) => void;
+  readonly closure2598_externref_shim: (a: number, b: number, c: any) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he12302e2040c5abf: (a: number, b: number) => void;
+  readonly closure2595_externref_shim: (a: number, b: number, c: any, d: any) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h673028e8718509d6: (a: number, b: number) => void;
+  readonly closure98623_externref_shim: (a: number, b: number, c: any) => void;
   readonly __wbindgen_start: () => void;
 }
 
