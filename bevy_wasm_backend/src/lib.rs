@@ -1,45 +1,51 @@
-use bevy::prelude::*;
+use bevy::{asset::AssetMetaCheck, prelude::*};
+use bevy_spine::prelude::*;
 use wasm_bindgen::prelude::*;
-use web_sys::console;
-
-macro_rules! console_log {
-    ($($t:tt)*) => {
-        console::log_1(&format!($($t)*).into());
-    };
-}
-
-// 컴포넌트 정의
-#[derive(Component)]
-struct Rectangle;
 
 #[wasm_bindgen]
 pub fn start() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(AssetPlugin {
+            meta_check: AssetMetaCheck::Never,
+            ..default()
+        }))
+        .add_plugins(SpinePlugin)
         .add_systems(Startup, setup)
-        .add_systems(Update, hello_world)
+        .add_systems(Update, set_skin_and_animation)
         .run();
 }
 
-fn hello_world() {
-    console_log!("hello world!");
-}
+#[derive(Component)]
+pub struct MixAndMatch;
 
-fn setup(mut commands: Commands) {
+fn setup(
+    mut commands: Commands,
+    mut skeletons: ResMut<Assets<SkeletonData>>,
+    asset_server: Res<AssetServer>,
+) {
     // 카메라 설정
     commands.spawn(Camera2dBundle::default());
 
-    // 네모 스프라이트 생성
+    // Spine 애니메이션 설정
+    let skeleton = SkeletonData::new_from_json(
+        asset_server.load("spine/swordsman.json"),
+        asset_server.load("spine/swordsman.atlas"),
+    );
+    let skeleton_handle = skeletons.add(skeleton);
+
     commands.spawn((
-        SpriteBundle {
-            sprite: Sprite {
-                color: Color::rgb(0.25, 0.25, 0.75),  // 파란색 계열
-                custom_size: Some(Vec2::new(50.0, 50.0)),  // 50x50 크기
-                ..default()
-            },
-            transform: Transform::from_xyz(0.0, 0.0, 0.0),  // 중앙에 위치
-            ..default()
+        bevy_spine::SpineBundle {
+            skeleton: skeleton_handle.clone(),
+            transform: Transform::from_xyz(0., 0., 0.).with_scale(Vec3::ONE),
+            ..Default::default()
         },
-        Rectangle,
+        MixAndMatch,
     ));
+}
+
+fn set_skin_and_animation(mut spine_query: Query<&mut Spine, With<MixAndMatch>>) {
+    for mut spine in spine_query.iter_mut() {
+        let _ = spine.skeleton.set_skin_by_name("green");
+        let _ = spine.animation_state.set_animation_by_name(0, "idle", true);
+    }
 }
