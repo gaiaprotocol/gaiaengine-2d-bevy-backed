@@ -16,7 +16,7 @@ pub fn start() {
 }
 
 #[derive(Component)]
-pub struct MixAndMatch;
+pub struct NotInitialized;
 
 fn setup(
     mut commands: Commands,
@@ -39,13 +39,22 @@ fn setup(
             transform: Transform::from_xyz(0., 0., 0.).with_scale(Vec3::ONE),
             ..Default::default()
         },
-        MixAndMatch,
+        NotInitialized,
     ));
 }
 
-fn set_skin_and_animation(mut spine_query: Query<&mut Spine, With<MixAndMatch>>) {
+fn set_skin_and_animation(mut spine_query: Query<&mut Spine, With<NotInitialized>>) {
     for mut spine in spine_query.iter_mut() {
         let _ = spine.skeleton.set_skin_by_name("green");
-        let _ = spine.animation_state.set_animation_by_name(0, "idle", true);
+        if spine
+            .animation_state
+            .track_at_index(1)
+            .map(|track| track.animation_time() == track.animation_end())
+            .unwrap_or(true)
+        {
+            let _ = spine
+                .animation_state
+                .set_animation_by_name(1, "idle", false);
+        }
     }
 }
